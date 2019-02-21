@@ -2,7 +2,7 @@
 
 A [BitBar](https://github.com/matryer/bitbar) plugin that changes your desktop wallpaper to Bing's daily one. (or one from the week)
 
-![MENU BAR GIF]()
+![MENU BAR GIF](https://github.com/tokfrans03/BitBar-Bing-Wallpaper/raw/master/Bing.gif)
 
 ## Installation
 - Install [BitBar](https://getbitbar.com/)
