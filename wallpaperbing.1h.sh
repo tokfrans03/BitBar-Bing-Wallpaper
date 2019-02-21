@@ -135,19 +135,21 @@ if [ "$1" = 'random' ]; then
     # Add URLs to a file and add bing to the beginning 
 
     echo "$json" | $JQ '.[0]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ > /tmp/imageurls.txt
-    echo "$json" | $JQ '.[1]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ >> /tmp/imageurls.txt
-    echo "$json" | $JQ '.[3]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ >> /tmp/imageurls.txt
-    echo "$json" | $JQ '.[2]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ >> /tmp/imageurls.txt
-    echo "$json" | $JQ '.[4]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ >> /tmp/imageurls.txt
-    echo "$json" | $JQ '.[5]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ >> /tmp/imageurls.txt
-    echo "$json" | $JQ '.[6]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ >> /tmp/imageurls.txt
-    echo "$json" | $JQ '.[7]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ >> /tmp/imageurls.txt
+    {
+    echo "$json" | $JQ '.[1]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ 
+    echo "$json" | $JQ '.[3]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
+    echo "$json" | $JQ '.[2]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
+    echo "$json" | $JQ '.[4]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
+    echo "$json" | $JQ '.[5]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
+    echo "$json" | $JQ '.[6]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
+    echo "$json" | $JQ '.[7]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
+    } >> /tmp/imageurls.txt
 
 
 
     # Select a URL from a random line 
 
-    randomurl=$(cat "${imageurls[0]}" | sed ''"$random"'q;d')
+    randomurl=$(< "${imageurls[0]}" sed ''"$random"'q;d')
 
     # Download image from the server
 
