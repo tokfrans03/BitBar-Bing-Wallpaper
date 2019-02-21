@@ -5,8 +5,9 @@
 # <bitbar.author>Tok1</bitbar.author>
 # <bitbar.author.github>Tokfrans03</bitbar.author.github>
 # <bitbar.desc>A new wallpaper from Bing every hour</bitbar.desc>
+# <bitbar.dependencies>JQ</bitbar.dependencies>
 
-JQ=/usr/local/bin/jq
+
 
 imageurls=(/tmp/imageurls.txt)
 
@@ -14,10 +15,30 @@ imageurls=(/tmp/imageurls.txt)
 
 random=$((1 + RANDOM % 8))
 
+# check if JQ is installed
+
+if [ -e "/usr/local/bin/jq" ]; then
+
+    JQ=/usr/local/bin/jq
+else
+
+    echo "Please install JQ with brew install JQ"
+
+    echo ---
+
+    echo "Install JQ | bash=brew param1=install param2=jq terminal=true"
+    
+    echo ---
+
+    echo "Update | refresh=true"
+
+    exit
+
+fi
+
 # Download the json with all the image URLs
 
 json=$( (curl -s "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=8") | $JQ '.images')
-
 
 if [ "$1" = '' ]; then
 
