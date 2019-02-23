@@ -9,6 +9,8 @@
 
 export PATH="/usr/local/bin:$PATH"
 
+readsetting=$(defaults read wallpaperbing setting)
+
 JQ=$(command -v jq)
 
 imageurls=(/tmp/imageurls.txt)
@@ -19,7 +21,7 @@ random=$((1 + RANDOM % 8))
 
 # check if JQ is installed
 
-if [ ! -e "$JQ" ]; then
+if [ ! -e $JQ ]; then
 
     echo "Please install JQ with brew install JQ"
 
@@ -57,23 +59,15 @@ if [ "$1" = '' ]; then
     
 
 
-    if [ -f '/tmp/today' ]; then
+    if [ $readsetting = "today" ]; then
 
         echo "Current setting: Today"
 
-        if [ -f '/tmp/random' ]; then 
-
-            rm '/tmp/random'
-
-        fi
-
         $0 today
 
-    fi
-
-    if [ -f '/tmp/random' ]; then 
-
-        echo "Current setting: Random"
+    else
+    
+      echo "Current setting: Random"
 
         $0 random
 
@@ -85,25 +79,13 @@ if [ "$1" = 'set' ]; then
 
     if [ "$2" = 'today' ]; then
 
-        touch '/tmp/today'
-
-        if [ -f '/tmp/random' ]; then 
-
-            rm '/tmp/random'
-
-        fi
+        defaults write wallpaperbing setting today
 
     fi
 
     if [ "$2" = 'random' ]; then
 
-    touch '/tmp/random'
-
-        if [ -f '/tmp/today' ]; then 
-
-            rm '/tmp/today'
-
-        fi
+        defaults write wallpaperbing setting random
 
     fi
 fi
@@ -113,7 +95,7 @@ if [ "$1" = 'today' ]; then
 
 # Create setting to remember
 
-touch '/tmp/today'
+defaults write wallpaperbing setting today
 
 echo "$json" | $JQ '.[0]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ > /tmp/imageurls.txt
 
@@ -142,15 +124,7 @@ if [ "$1" = 'random' ]; then
 
     # Create setting to remember
 
-    touch '/tmp/random'
-
-    # Delete douplicete settings
-
-    if [ -f '/tmp/today' ]; then
-
-        rm '/tmp/today'
-
-    fi
+    defaults write wallpaperbing setting random
 
     # Add URLs to a file and add bing to the beginning 
 
