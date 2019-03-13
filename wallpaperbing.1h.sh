@@ -15,6 +15,8 @@ JQ=$(command -v jq)
 
 imageurls=(/tmp/imageurls.txt)
 
+#  wallpaperpath=$(if [ -e "/tmp/wallpaper.jpg" ] && [ ! -e "/tmp/wallpaper1.jpg" ]; then echo "/tmp/wallpaper1.jpg"; rm /tmp/wallpaper.jpg; else echo "/tmp/wallpaper.jpg"; if [ -e /tmp/wallpaper1.jpg ]; then rm /tmp/wallaper.jpg; fi; fi)
+
 # Create a random number for random URL selection
 
 random=$((1 + RANDOM % 8))
@@ -97,9 +99,15 @@ if [ "$1" = 'today' ]; then
 
 defaults write wallpaperbing setting today
 
-echo "$json" | $JQ '.[0]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ > /tmp/imageurls.txt
+echo "$json" | $JQ '.[0]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/'/'https:\/\/bing.com\/'/ > /tmp/imageurls.txt
 
 curl -s -L "$(cat "${imageurls[0]}")" -o "/tmp/wallpaper.jpg"
+
+# Get comment
+
+Comment=$(echo "$json" | $JQ '.[0]' | $JQ '.copyright' | sed s/'"'// | sed s/'"'//)
+
+echo $Comment
 
 # Set dummy image as wallpaper so Finder will change the wallpaper to the pic that we want
 
@@ -113,9 +121,7 @@ osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/t
 
 # Cleanup
  
-rm /tmp/imageurls.txt
-rm /tmp/dummyimg.jpg
-rm /tmp/wallpaper.jpg
+# rm /tmp/imageurls.txt
 
 exit
 fi
@@ -128,15 +134,15 @@ if [ "$1" = 'random' ]; then
 
     # Add URLs to a file and add bing to the beginning 
 
-    echo "$json" | $JQ '.[0]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ > /tmp/imageurls.txt
+    echo "$json" | $JQ '.[0]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/'/'https:\/\/bing.com\/'/ > /tmp/imageurls.txt
     {
-    echo "$json" | $JQ '.[1]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/ 
-    echo "$json" | $JQ '.[3]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
-    echo "$json" | $JQ '.[2]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
-    echo "$json" | $JQ '.[4]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
-    echo "$json" | $JQ '.[5]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
-    echo "$json" | $JQ '.[6]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
-    echo "$json" | $JQ '.[7]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/az'/'https:\/\/bing.com\/az'/
+    echo "$json" | $JQ '.[1]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/'/'https:\/\/bing.com\/'/ 
+    echo "$json" | $JQ '.[3]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/'/'https:\/\/bing.com\/'/
+    echo "$json" | $JQ '.[2]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/'/'https:\/\/bing.com\/'/
+    echo "$json" | $JQ '.[4]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/'/'https:\/\/bing.com\/'/
+    echo "$json" | $JQ '.[5]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/'/'https:\/\/bing.com\/'/
+    echo "$json" | $JQ '.[6]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/'/'https:\/\/bing.com\/'/
+    echo "$json" | $JQ '.[7]' | $JQ '.url' | sed s/'"'// | sed s/'"'// | sed s/'\/'/'https:\/\/bing.com\/'/
     } >> /tmp/imageurls.txt
 
 
@@ -148,7 +154,6 @@ if [ "$1" = 'random' ]; then
     # Download image from the server
 
     curl -s -L "$randomurl" -o "/tmp/wallpaper.jpg"
-
 
     # Set dummy image as wallpaper so Finder will change the wallpaper to the pic that we want
 
@@ -162,11 +167,7 @@ if [ "$1" = 'random' ]; then
 
     # Cleanup
 
-    
     rm /tmp/imageurls.txt
-    rm /tmp/dummyimg.jpg
-    rm /tmp/wallpaper.jpg
-
 
     echo "Random Url: $random"
 
