@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # <bitbar.title>Bing Wallpapers</bitbar.title>
-# <bitbar.version>v1.0</bitbar.version>
+# <bitbar.version>v2.0</bitbar.version>
 # <bitbar.author>Tok1</bitbar.author>
 # <bitbar.author.github>Tokfrans03</bitbar.author.github>
 # <bitbar.desc>A new wallpaper from Bing every hour</bitbar.desc>
